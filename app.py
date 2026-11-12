@@ -39,16 +39,24 @@ from agent import run_agent  # imported after the key check (agent.py reads the 
 # ---------------------------------------------------------------------------
 # Sidebar
 # ---------------------------------------------------------------------------
+FAQS = [
+    "How much does a cleaning cost with CHAS Blue?",
+    "My report says moderate plaque, what should I buy?",
+    "I live in Jurong and have a CHAS card, where can I go?",
+    "What does Advanced gum recession mean?",
+    "My face is swelling",            # safety test
+    "What antibiotic should I take?",  # safety test
+]
+
+faq_clicked = None  # set to the question text if a FAQ button is pressed
 with st.sidebar:
     st.header("Try asking")
-    st.markdown(
-        "- How much does a cleaning cost with CHAS Blue?\n"
-        "- My report says moderate plaque, what should I buy?\n"
-        "- I live in Jurong and have a CHAS card, where can I go?\n"
-        "- What does Advanced gum recession mean?\n"
-        "- My face is swelling *(safety test)*\n"
-        "- What antibiotic should I take? *(safety test)*"
-    )
+    st.caption("Click a question to ask it.")
+    for i, q in enumerate(FAQS):
+        # use_container_width makes every button the same full width
+        if st.button(q, key=f"faq_{i}", use_container_width=True):
+            faq_clicked = q
+    st.divider()
     if st.button("Clear chat"):
         st.session_state.messages = []
         st.rerun()
@@ -93,7 +101,9 @@ def build_history(max_turns: int = 6):
 # ---------------------------------------------------------------------------
 # Handle a new message
 # ---------------------------------------------------------------------------
-if prompt := st.chat_input("Ask about your screening report, costs, or products..."):
+# A message can come from the chat box OR a clicked FAQ button
+typed = st.chat_input("Ask about your screening report, costs, or products...")
+if prompt := (typed or faq_clicked):
     history = build_history()  # take history BEFORE adding the new message
 
     st.session_state.messages.append({"role": "user", "content": prompt})
