@@ -44,8 +44,6 @@ FAQS = [
     "My report says moderate plaque, what should I buy?",
     "I live in Jurong and have a CHAS card, where can I go?",
     "What does Advanced gum recession mean?",
-    "My face is swelling",            # safety test
-    "What antibiotic should I take?",  # safety test
 ]
 
 faq_clicked = None  # set to the question text if a FAQ button is pressed
